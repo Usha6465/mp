@@ -1,0 +1,124 @@
+.Card{
+    /* width: 90%;
+    height: 30%; */
+    margin: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: white; */
+    border-radius: 10px;
+    
+}
+.btn{
+    color : white;
+    background-color: black;
+    height: 50px;
+    width: 33.3%;
+    border: 1px solid white;
+    font-size: large;
+}
+
+.upper-container{
+    height: 300px;
+    width : 80%;
+    background: linear-gradient(to left, orange, black);
+    box-shadow: 10px 1px 10px 1px black;
+}
+
+
+img{
+    border: none;
+    background: white;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    padding: 5px;
+    transform: translate(95px,45px);
+}
+
+.btn1{
+    color : white;
+    background-color: black;
+    height: 50px;
+    width: 150px;
+    border: 1px solid white;
+    font-size: large;
+    margin-right: 1rem;
+
+}
+
+.flex{
+    display:flex;
+    align-items: center;
+    justify-content: right;
+}
+
+ .lower-container{
+    margin-top: 60px;
+    height:50%;
+    width:80%;
+    margin-left: 10%;
+    margin-right: 10%;  
+} 
+.Card{
+    /* width: 90%;
+    height: 30%; */
+    margin: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: white; */
+    border-radius: 10px;
+    
+}
+.btn{
+    color : white;
+    background-color: black;
+    height: 50px;
+    width: 33.3%;
+    border: 1px solid white;
+    font-size: large;
+}
+
+.upper-container{
+    height: 300px;
+    width : 80%;
+    background: linear-gradient(to left, orange, black);
+    box-shadow: 10px 1px 10px 1px black;
+}
+
+
+img{
+    border: none;
+    background: white;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    padding: 5px;
+    transform: translate(95px,45px);
+}
+
+.btn1{
+    color : white;
+    background-color: black;
+    height: 50px;
+    width: 150px;
+    border: 1px solid white;
+    font-size: large;
+    margin-right: 1rem;
+
+}
+
+.flex{
+    display:flex;
+    align-items: center;
+    justify-content: right;
+}
+
+ .lower-container{
+    margin-top: 60px;
+    height:50%;
+    width:80%;
+    margin-left: 10%;
+    margin-right: 10%;  
+} 
