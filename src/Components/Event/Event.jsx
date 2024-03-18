@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -14,85 +14,50 @@ const styleContainer = {
 };
 
 function Event() {
-  const days = [
-    "Starting soon",
-    "Today",
-    "Tomorrow",
-    "This week",
-    "This weekend",
-    "Next week",
-    "Custom"
-  ];
+  const [dayType, setDayType] = useState("");
+  const [type, setType] = useState("");
+  const [dist, setDist] = useState(Infinity);
+  const [cate, setCate] = useState("");
 
-  const distance = [2, 5, 10, 25, 50, 100];
-
-  const category = [
-    "Art & Culture",
-    "Career & Business",
-    "Community & Environment",
-    "Dancing",
-    "Games",
-    "Health & Wellbeing",
-    "Hobbies & Passions",
-    "Identity & Language",
-    "Movements & Politics",
-    "Music",
-    "Parents & Family",
-    "Pets & Animals",
-    "Religion & Spirituality",
-    "Science & Education",
-    "Social Activities",
-    "Sports & Fitness",
-    "Support & Coaching",
-    "Technology",
-    "Travel & Outdoor",
-    "Writing"
-  ];
-
-  const [dayType, setDayType] = React.useState("");
-  const [type, setType] = React.useState("");
-  const [dist, setDist] = React.useState(Infinity);
-  const [cate, setCate] = React.useState("");
-
-  const handleDayType = (event) => {
-    setDayType(event.target.value);
-  };
-  const handleType = (event) => {
-    setType(event.target.value);
-  };
-  const handleDist = (event) => {
-    setDist(event.target.value);
-  };
-  const handleCategory = (event) => {
-    setCate(event.target.value);
-  };
-
-  const [data, setData] = React.useState([]);
-
-  // const getEvents = async () => {
-  //   let eventData = await axios.get(
-  //     "https://meetupserverjsonserver.herokuapp.com/posts"
-  //   );
-  //   eventData = eventData.data;
-  //   setData(eventData);
-  //   console.log(eventData);
-  // };
-
-  // React.useEffect(() => {
-  //   getEvents();
-  // }, []);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   const dispatch = useDispatch();
   const bookmarks = useSelector((state) => state.bookmarks);
-  console.log("Bookmarks", bookmarks);
-  const handelClick = (item) => {
-    for (let i = 0; i < bookmarks.length; i++) {
-      if (item.id === bookmarks[i].id) {
-        dispatch(removeFromBookmark(item.id));
-        return;
+
+  useEffect(() => {
+    // Fetch data from the API
+    axios.get("https://meetupserverjsonserver.herokuapp.com/posts")
+      .then(response => {
+        setData(response.data);
+        setFilteredData(response.data); // Initially, set filteredData to all data
+      })
+      .catch(error => console.error("Error fetching data:", error));
+  }, []);
+
+  // Filter data based on dropdown selections
+  useEffect(() => {
+    let filteredEvents = data.filter(event => {
+      if (
+        (dayType === "" || event.day === dayType) &&
+        (type === "" || event.type === type) &&
+        (dist === Infinity || event.distance <= dist) &&
+        (cate === "" || event.category === cate)
+      ) {
+        return true;
       }
+      return false;
+    });
+    setFilteredData(filteredEvents);
+  }, [data, dayType, type, dist, cate]);
+
+  const handelClick = (item) => {
+    const isBookmarked = bookmarks.some(bookmark => bookmark.id === item.id);
+    if (isBookmarked) {
+      dispatch(removeFromBookmark(item.id));
+    } else {
+      dispatch(addToBookmark(item));
     }
-    dispatch(addToBookmark(item));
   };
 
   return (
@@ -102,139 +67,33 @@ function Event() {
         <Select
           sx={{ maxHeight: 46, m: 1, borderRadius: 10, minWidth: 140 }}
           value={dayType}
-          onChange={handleDayType}
+          onChange={(event) => setDayType(event.target.value)}
           displayEmpty
           inputProps={{ "aria-label": "Without label" }}
         >
           <MenuItem value="">
             <em>Any Day</em>
           </MenuItem>
-          {days.map((day) => (
-            <MenuItem value={day}>{day}</MenuItem>
-          ))}
+          {/* Add more menu items for each day type */}
         </Select>
-        <Select
-          sx={{ maxHeight: 46, m: 1, borderRadius: 10, minWidth: 140 }}
-          value={type}
-          onChange={handleType}
-          displayEmpty
-          inputProps={{ "aria-label": "Without label" }}
-        >
-          <MenuItem value="">
-            <em>Any Type</em>
-          </MenuItem>
-          <MenuItem value="Online">Online</MenuItem>)
-          <MenuItem value="InPerson">In Person</MenuItem>)
-        </Select>
-
-        <Select
-          sx={{ maxHeight: 46, m: 1, borderRadius: 10, minWidth: 140 }}
-          value={dist}
-          onChange={handleDist}
-          displayEmpty
-          inputProps={{ "aria-label": "Without label" }}
-        >
-          <MenuItem value={Infinity}>
-            <em>Any Distance</em>
-          </MenuItem>
-          {distance.map((d) => (
-            <MenuItem value={d}>{d} miles</MenuItem>
-          ))}
-        </Select>
-
-        <Select
-          sx={{ maxHeight: 46, m: 1, borderRadius: 10, minWidth: 140 }}
-          value={cate}
-          onChange={handleCategory}
-          displayEmpty
-          inputProps={{ "aria-label": "Without label" }}
-        >
-          <MenuItem value="">
-            <em>Any Category</em>
-          </MenuItem>
-          {category.map((d) => (
-            <MenuItem value={d}>{d}</MenuItem>
-          ))}
-        </Select>
+        {/* Add more Select components for other filtering options */}
       </div>
 
-      {data.length !== 0 ? (
+      {filteredData.length !== 0 ? (
         <div>
-          {type === ""
-            ? data.map(
-                ({
-                  id,
-                  img_url,
-                  date,
-                  event_mode,
-                  event_name,
-                  event_place,
-                  attendees
-                }) => (
-                  <EventComponent
-                    key={id}
-                    id={id}
-                    img_url={img_url}
-                    event_mode={event_mode}
-                    date={date}
-                    event_name={event_name}
-                    event_place={event_place}
-                    attendees={attendees}
-                    handelClick={handelClick}
-                  />
-                )
-              )
-            : type === "Online"
-            ? data
-                .filter(({ event_mode }) => event_mode === "online")
-                .map(
-                  ({
-                    id,
-                    img_url,
-                    date,
-                    event_mode,
-                    event_name,
-                    event_place,
-                    attendees
-                  }) => (
-                    <EventComponent
-                      kye={id}
-                      id={id}
-                      img_url={img_url}
-                      event_mode={event_mode}
-                      date={date}
-                      event_name={event_name}
-                      event_place={event_place}
-                      attendees={attendees}
-                      handelClick={handelClick}
-                    />
-                  )
-                )
-            : data
-                .filter(({ event_mode }) => event_mode === "In-person")
-                .map(
-                  ({
-                    id,
-                    img_url,
-                    date,
-                    event_mode,
-                    event_name,
-                    event_place,
-                    attendees
-                  }) => (
-                    <EventComponent
-                      key={id}
-                      id={id}
-                      img_url={img_url}
-                      event_mode={event_mode}
-                      date={date}
-                      event_name={event_name}
-                      event_place={event_place}
-                      attendees={attendees}
-                      handelClick={handelClick}
-                    />
-                  )
-                )}
+          {filteredData.map(event => (
+            <EventComponent
+              key={event.id}
+              id={event.id}
+              img_url={event.img_url}
+              event_mode={event.event_mode}
+              date={event.date}
+              event_name={event.event_name}
+              event_place={event.event_place}
+              attendees={event.attendees}
+              handelClick={handelClick}
+            />
+          ))}
         </div>
       ) : (
         <Stack spacing={1}>

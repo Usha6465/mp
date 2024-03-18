@@ -10,74 +10,90 @@ const styleImg = {
   cursor: "pointer"
 };
 
+// Random sentences for Terms of Service and Privacy Policy
+const termsOfServiceContent = [
+  "By using this website, you agree to our Terms of Service.",
+  "Your use of this website constitutes acceptance of our Terms of Service.",
+  "Please review our Terms of Service carefully before using this website."
+];
+
+const privacyPolicyContent = [
+  "Your privacy is important to us. Read our Privacy Policy for more information.",
+  "We are committed to protecting your privacy. View our Privacy Policy for details.",
+  "Learn more about how we handle your personal information by reading our Privacy Policy."
+];
+
 function Footer() {
+  const [showTermsPopup, setShowTermsPopup] = React.useState(false);
+  const [showPrivacyPopup, setShowPrivacyPopup] = React.useState(false);
+
+  const toggleTermsPopup = () => setShowTermsPopup(!showTermsPopup);
+  const togglePrivacyPopup = () => setShowPrivacyPopup(!showPrivacyPopup);
+
   return (
     <div className={styles.footer}>
-      <h4 className={styles.head1}>
-        Create your own group.
-        <button className={styles.buttong}>Get Started</button>
-      </h4>
-      <hr />
       <div className={styles.container}>
-        <div className={styles.items}>
-          <p className={styles.heading}>Your Account</p>
-          <p>Settings</p>
-          <p>Logout</p>
-          <p>Help</p>
+        <div className={styles.section}>
+          <h3>Hear Me Out</h3>
+          <p>FAQ's: <a href="mailto:hearmeout@gmail.com" style={{ textDecoration: 'none', color: 'white' }}>hearmeout@gmail.com</a></p>
         </div>
-        <div className={styles.items}>
-          <p className={styles.heading}>Discover</p>
-          <p>Groups</p>
-          <p>Calendar</p>
-          <p>Topics</p>
-          <p>Cities</p>
-          <p>Online Events</p>
-          <p>Venues</p>
-        </div>
-        <div className={styles.items}>
-          <p className={styles.heading}>Hear Me Out</p>
-          <p>About</p>
-          <p>Blog</p>
-          <p>Hear Me Out Pro</p>
-        </div>
+        
       </div>
-
       <div className={styles.container1}>
-        <div className={styles.division1}>
-          <p className={styles.heading}>Follow us</p>
-          <FacebookIcon sx={{ cursor: "pointer" }} fontSize="large" />
-          <TwitterIcon
-            sx={{ marginLeft: "35px", cursor: "pointer" }}
-            fontSize="large"
-          />
-          <YouTubeIcon
-            sx={{ marginLeft: "35px", cursor: "pointer" }}
-            fontSize="large"
-          />
-          <InstagramIcon
-            sx={{ marginLeft: "35px", cursor: "pointer" }}
-            fontSize="large"
-          />
+      <div className={styles.section}>
+          <p>Follow Us</p>
+          <div className={styles.socialIcons}>
+            <a href="https://www.facebook.com" style={{ textDecoration: 'none', color: 'white', marginRight: '10px' }}>
+              <FacebookIcon fontSize="large" />
+            </a>
+            <a href="https://twitter.com" style={{ textDecoration: 'none', color: 'white', marginRight: '10px' }}>
+              <TwitterIcon fontSize="large" />
+            </a>
+            <a href="https://www.youtube.com" style={{ textDecoration: 'none', color: 'white', marginRight: '10px' }}>
+              <YouTubeIcon fontSize="large" />
+            </a>
+            <a href="https://www.instagram.com" style={{ textDecoration: 'none', color: 'white' }}>
+              <InstagramIcon fontSize="large" />
+            </a>
+          </div>
         </div>
         <div className={styles.division2}>
-          <img
-            style={styleImg}
-            src="https://secure.meetupstatic.com/next/images/app-download/android/download_en-US.svg?w=128"
-            alt="image"
-          />
-          <img
-            className={styles.appleStore}
-            src="https://secure.meetupstatic.com/next/images/app-download/ios/download_en-US.svg?w=128"
-            alt="image"
-          />
+          <a href="https://play.google.com/store/apps/details?id=com.meetup">
+            <img
+              style={styleImg}
+              src="https://secure.meetupstatic.com/next/images/app-download/android/download_en-US.svg?w=128"
+              alt="Google Play Store"
+            />
+          </a>
+          <a href="https://apps.apple.com/us/app/meetup/id375990038">
+            <img
+              className={styles.appleStore}
+              src="https://secure.meetupstatic.com/next/images/app-download/ios/download_en-US.svg?w=128"
+              alt="Apple App Store"
+            />
+          </a>
         </div>
       </div>
       <div className={styles.bottom}>
-        <p>© 2022 Hear Me Out</p>
-        <p>Terms of Service</p>
-        <p>Privacy Policy</p>
-        <p>Cookie Policy</p>
-        <p>Help</p>
+        <p>@2023 Hear Me Out</p>
+        <p><a href="#" onClick={toggleTermsPopup} style={{ textDecoration: 'none', color: 'white' }}>Terms of Service</a></p>
+        {showTermsPopup && (
+          <div className={styles.popup}>
+            <div className={styles.popupContent}>
+              {termsOfServiceContent[Math.floor(Math.random() * termsOfServiceContent.length)]}
+            </div>
+            <button onClick={toggleTermsPopup}>Close</button>
+          </div>
+        )}
+        <p><a href="#" onClick={togglePrivacyPopup} style={{ textDecoration: 'none', color: 'white' }}>Privacy Policy</a></p>
+        {showPrivacyPopup && (
+          <div className={styles.popup}>
+            <div className={styles.popupContent}>
+              {privacyPolicyContent[Math.floor(Math.random() * privacyPolicyContent.length)]}
+            </div>
+            <button onClick={togglePrivacyPopup}>Close</button>
+          </div>
+        )}
       </div>
     </div>
   );
